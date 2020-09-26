@@ -5,7 +5,6 @@
 __pycache__
 .venv
 .env
-set_env_vars.sh
 *credentials.txt*
 htmlcov
 my_app.log
