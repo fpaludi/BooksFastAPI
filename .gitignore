@@ -1,4 +1,3 @@
-.vscode
 .pytest_cache
 .ipynb_checkpoints
 .pyc
@@ -9,3 +8,5 @@ __pycache__
 set_env_vars.sh
 *credentials.txt*
 htmlcov
+my_app.log
+sandbox
