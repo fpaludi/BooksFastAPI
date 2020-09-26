@@ -52,7 +52,7 @@ application-import-names = "main"
 max_complexity = 6
 
 [tool.flakehell.plugins]
-pylint = ["+*"]
+pylint = ["+*", "-W1203"]
 flake8-blind-except = ["+*"]
 flake8-builtins = ["+*"]
 flake8-logging-format = ["+*"]

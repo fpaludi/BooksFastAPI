@@ -6,7 +6,7 @@ from src.db.models.orm import metadata, start_mappers
 from src.db.models.books import Books
 
 
-def create_tables(engine, session):
+def create_tables(engine, session):  # noqa
     print(f"\nCreating Tables in {engine.url}\n")
     try:
         start_mappers()
@@ -17,7 +17,7 @@ def create_tables(engine, session):
     # Add books info
     books_df = pd.read_csv("src/data/books.csv")
     print("Saving books...")
-    for idx, row in books_df.iterrows():
+    for _, row in books_df.iterrows():
         book = Books(
             isbn=row["isbn"], title=row["title"], author=row["author"], year=row["year"]
         )
@@ -28,14 +28,14 @@ def create_tables(engine, session):
     session.commit()
 
 
-def delete_tables(engine, session):
+def delete_tables(engine, session):  # noqa
     print("\nRemoving Tables...\n")
     with contextlib.closing(engine.connect()) as con:
         trans = con.begin()
         for table in reversed(metadata.sorted_tables):
             con.execute(table.delete())
         for table in reversed(metadata.sorted_tables):
-            con.execute(f'TRUNCATE TABLE {table.name} RESTART IDENTITY CASCADE')
+            con.execute(f"TRUNCATE TABLE {table.name} RESTART IDENTITY CASCADE")
         trans.commit()
 
 

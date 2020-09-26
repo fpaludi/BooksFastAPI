@@ -6,6 +6,7 @@ from fastapi import FastAPI
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
 
+
 class Settings:  # i.e. Production
     DATABASE_URL = os.environ.get("DATABASE_URL")
     GOODREAD_API_KEY = os.environ.get("GOODREAD_API_KEY")
@@ -29,7 +30,7 @@ class TestSettings:
 
 
 def update_settings(config_name="default"):
-    global Settings
+    # global Settings
     config = {
         "development": DevSettings,
         "testing": TestSettings,
@@ -48,6 +49,7 @@ def create_app(config_name="default"):
     app = FastAPI(title="BooksAPI",)
 
     from src.api.controllers import control
+
     app.include_router(control)
 
     # Start ORM Mappers
