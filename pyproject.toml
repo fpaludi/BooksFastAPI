@@ -1,0 +1,66 @@
+[tool.poetry]
+name = "books"
+version = "0.1.0"
+description = "fastapp"
+authors = ["Palu"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.7.4"
+fastapi = "^0.61"
+uvicorn = "^0.11"
+SQLAlchemy = "^1.3"
+psycopg2-binary = "^2.8"
+pandas = "^1.0.4"
+requests = "^2.23.0"
+dependency-injector = "^3.27"
+python-dotenv = "^0.14"
+aiofiles = "0.5.0"
+python-multipart = "0.0.5"
+passlib = "1.7.2"
+bcrypt = "3.2.0"
+python-jose = "3.2.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.0"
+pytest-cov = "^2.10"
+mock = "^4.0"
+black = "^19.10b0"
+pylint = "2.6.0"
+flakehell = "^0.3.3"
+flake8 = "^3.7"
+flake8-blind-except = "*"
+flake8-builtins = "*"
+flake8-logging-format = "*"
+flake8-comprehensions = "*"
+flake8-fixme = "*"
+flake8-pytest = "*"
+flake8-mock = "*"
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+
+[tool.flakehell]
+# make output nice
+format = "grouped"
+# show line of source code in output
+show_source = true
+statistics = false
+application-import-names = "main"
+max_complexity = 6
+
+[tool.flakehell.plugins]
+pylint = ["+*"]
+flake8-blind-except = ["+*"]
+flake8-builtins = ["+*"]
+flake8-logging-format = ["+*"]
+flake8-comprehensions = ["+*"]
+flake8-fixme = ["+*"]
+flake8-pytest = ["+*"]
+flake8-mock = ["+*"]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
