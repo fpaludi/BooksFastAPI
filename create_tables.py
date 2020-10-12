@@ -1,7 +1,6 @@
 import contextlib
 import pandas as pd
 from sqlalchemy.exc import ArgumentError
-from settings import update_settings
 from src.db.models.orm import metadata, start_mappers
 from src.db.models.books import Books
 
@@ -40,8 +39,8 @@ def delete_tables(engine, session):  # noqa
 
 
 if __name__ == "__main__":
-    update_settings("default")
-    from src.db.repositories import RepositoryContainer
+    from settings import settings  # noqa
+    from src.db.repositories.factories import RepositoryContainer
 
     engine = RepositoryContainer.engine()
     session = RepositoryContainer.DEFAULT_SESSIONFACTORY()

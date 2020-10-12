@@ -1,24 +1,27 @@
+import os
 import pytest
 from fastapi.testclient import TestClient
 from abc import ABC
-from settings import create_app, update_settings
+from app_factory import app_factory
+from settings import settings
 from create_tables import create_tables, delete_tables
 from tests.integration.fake_mock_data import DBTestingData
-
-CONF_NAME = "testing"
 
 
 def pytest_configure():
     print("INITIAL Test configuration")
     print("Upload Setting object for testing pourposes")
-    update_settings(CONF_NAME)
+    DATABASE_URI = os.environ.get("DATABASE_TEST_URI")
+    settings.DATABASE_URI = DATABASE_URI
+    if settings.DATABASE_URI != DATABASE_URI:
+        raise ValueError("Tests are not using testing database")
 
 
 class BaseTestControllers(ABC):
     @pytest.fixture(scope="class")
     def client(self):
         # Create App Object
-        app = create_app(CONF_NAME)
+        app = app_factory()
 
         # Create DB for testing
         self.delete_testing_database()
@@ -34,13 +37,13 @@ class BaseTestControllers(ABC):
 
     @pytest.fixture(scope="function")
     def unit_of_work(self):
-        from src.db.repositories import RepositoryContainer
+        from src.db.repositories.factories import RepositoryContainer
 
         uow = RepositoryContainer.uow()
         return uow
 
     def create_testing_database(self):
-        from src.db.repositories import RepositoryContainer
+        from src.db.repositories.factories import RepositoryContainer
 
         engine = RepositoryContainer.engine()
         session = RepositoryContainer.DEFAULT_SESSIONFACTORY()
@@ -80,7 +83,7 @@ class BaseTestControllers(ABC):
         print("-" * 80)
 
     def delete_testing_database(self):
-        from src.db.repositories import RepositoryContainer
+        from src.db.repositories.factories import RepositoryContainer
 
         print()
         print("*" * 80)
