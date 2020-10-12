@@ -1,7 +1,7 @@
 import uvicorn
-from settings import create_app
+from app_factory import app_factory
 
-app = create_app()
+app = app_factory()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
