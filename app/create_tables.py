@@ -13,18 +13,25 @@ def create_tables(engine, session):  # noqa
         pass
     metadata.create_all(engine)
 
-    # Add books info
-    books_df = pd.read_csv("src/data/books.csv")
-    print("Saving books...")
-    for _, row in books_df.iterrows():
-        book = Books(
-            isbn=row["isbn"], title=row["title"], author=row["author"], year=row["year"]
-        )
-        session.add(book)
+    # If book table is empty add books
+    if session.query(Books).first() is None:
+        # Add books info
+        books_df = pd.read_csv("src/data/books.csv")
+        print("Saving books...")
+        for _, row in books_df.iterrows():
+            book = Books(
+                isbn=row["isbn"],
+                title=row["title"],
+                author=row["author"],
+                year=row["year"],
+            )
+            session.add(book)
 
-    # Commit Changes
-    print("Commiting changes...")
-    session.commit()
+        # Commit Changes
+        print("Commiting changes...")
+        session.commit()
+    else:
+        print("Table already has data")
 
 
 def delete_tables(engine, session):  # noqa

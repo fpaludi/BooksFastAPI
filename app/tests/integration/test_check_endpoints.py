@@ -68,7 +68,6 @@ class TestControllers(BaseTestControllers):
             params={"search_params": "isbn", "value": "1234"},
             headers={"Authorization": auth_str},
         )
-        print(response.json())
         assert response.status_code == 200
 
     def test_api_get_goodread_data(self, client):
@@ -91,5 +90,4 @@ class TestControllers(BaseTestControllers):
             json={"value": 5, "comment": "Good"},
             headers={"Authorization": auth_str},
         )
-        print(response.json())
         assert response.status_code == 200

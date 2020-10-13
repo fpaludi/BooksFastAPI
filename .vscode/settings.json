@@ -1,6 +1,6 @@
 {
     "python.pythonPath": ".venv/bin/python",
-    "python.languageServer": "Microsoft",
+    "python.languageServer": "Pylance",
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.venv/**": true,
