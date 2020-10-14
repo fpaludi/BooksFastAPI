@@ -24,7 +24,7 @@ repos:
         types: [python]
     -   id: tests
         name: run tests
-        entry: make all_tests
+        entry: pytest app/tests -v -s --cov src/services --cov-report term
         args: []
         language: python
         types: [python]
