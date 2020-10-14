@@ -51,5 +51,6 @@ if __name__ == "__main__":
 
     engine = RepositoryContainer.engine()
     session = RepositoryContainer.DEFAULT_SESSIONFACTORY()
-
     create_tables(engine, session)
+    session.close()  # noqa
+    engine.dispose()

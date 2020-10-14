@@ -99,6 +99,8 @@ class BaseTestControllers(ABC):
             )
             uow.repository.add_review(new_review)
             uow.commit()
+        session.close()  # noqa
+        engine.dispose()
         print("-" * 80)
 
     def delete_testing_database(self):
@@ -111,6 +113,8 @@ class BaseTestControllers(ABC):
         engine = RepositoryContainer.engine()
         session = RepositoryContainer.DEFAULT_SESSIONFACTORY()
         delete_tables(engine, session)
+        session.close()  # noqa
+        engine.dispose()
         print("-" * 80)
 
     # @classmethod

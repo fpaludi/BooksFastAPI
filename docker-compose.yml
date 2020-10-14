@@ -13,7 +13,7 @@ services:
       context: ./
       dockerfile: docker/Dockerfile
     volumes:
-      - ./app/:/app/
+      - ./app/:/app/app/
     command: bash -c "while true; do sleep 1; done"
 
   devdb:
