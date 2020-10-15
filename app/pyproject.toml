@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "Books API"
+name = "BooksAPI"
 version = "0.1.0"
-description = "It is Book review REST API based on python framework Fast API"
+description = "api"
 authors = ["Palu"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.7.7"
+python = "3.7"
 fastapi = "^0.61"
 uvicorn = "^0.11"
 SQLAlchemy = "^1.3"

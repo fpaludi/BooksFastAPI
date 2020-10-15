@@ -87,3 +87,5 @@ already installed)
 ```bash
 source scripts/start_project.sh
 ```
+## Next Steps
+Adding continuous integration process
