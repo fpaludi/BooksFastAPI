@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "books"
+name = "Books API"
 version = "0.1.0"
-description = "fastapp"
+description = "It is Book review REST API based on python framework Fast API"
 authors = ["Palu"]
 license = "MIT"
 readme = "README.md"
