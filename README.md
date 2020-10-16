@@ -56,7 +56,7 @@ images/services:
   1. The API based on FAST API
   1. PostgreSQL database for development
   1. PostgreSQL database for integration testing
-  1. PgAdmin as Postgres database administrator
+  1. PgAdmin as PostgreSQL database administrator
 
 The project has 2 database because. One of them is used to run the integration tests 
 and it is cleaned after each test process. In that way, the test guarantee that start 
@@ -78,14 +78,16 @@ bases on **pyproject.toml** file to obtain dependencies. This file also allows
 to configure other tools like:
   * Black
   * Flakehell
-  * Others
+  * and others...
 
-The project uses black and flakehell as pre-commit hooks. In order to do that it is necessary to install the python dependencies locally by using a virtual environment.
-It is possible to do it easilly by running (assuming you have python >= 3.7 
-already installed)
+The project uses black and flakehell (with some extensions) as pre-commit hooks. In order to run 
+this hooks it is necessary to install the python dependencies locally inside a virtual env. 
+All the dependencies and hooks can be installed and configured easily by running 
+(assuming you have python >= 3.7 already installed):
 
 ```bash
 source scripts/start_project.sh
 ```
+
 ## Next Steps
-Adding continuous integration process
+Adding continuous integration process by using GitHub Actions
