@@ -1,8 +1,11 @@
-on: [push]
-name: integration
+on:
+  push:
+    branches:
+      - 'master'
+name: build
 jobs:
-  integration:
-    name: integration into repo
+  build:
+    name: build app
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -20,4 +23,16 @@ jobs:
         envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
         file_name: app/.env
     - run: make build 
+
+  coverage:
+    name: coverage app 
+    runs-on: ubuntu-latest
+    steps:
     - run: make run_tests_no_html
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./app/coverage.xml
+        flags: unittests
+    - run: bash <(curl -s https://codecov.io/bash)
