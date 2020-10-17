@@ -9,6 +9,11 @@ run_tests: up
 	--cov src/ \
 	--cov-report html --cov-report term
 
+run_tests_no_html: up
+	docker-compose exec -T api pytest tests/ -vv -s -x \
+	--cov src/ \
+	--cov-report term
+
 run_api: up
 	docker-compose exec api /start-reload.sh
 
