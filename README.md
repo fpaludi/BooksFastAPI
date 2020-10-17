@@ -1,6 +1,14 @@
-[![Build Actions Status](https://github.com/fpaludi/BooksFastAPI/workflows/build/badge.svg)](https://github.com/{fpaludi}/{BooksFastAPI}/actions)
-
-[![Coverage Actions Status](https://github.com/fpaludi/BooksFastAPI/workflows/coverage/badge.svg)](https://github.com/{fpaludi}/{BooksFastAPI}/actions)
+<p align="center">
+  <a href="https://github.com/fpaludi/BooksFastAPI/actions?query=workflow%3ABuild">
+  <img src="https://github.com/fpaludi/BooksFastAPI/workflows/Build/badge.svg">
+  </a>
+  <a href="https://github.com/fpaludi/BooksFastAPI/actions?query=workflow%3ATest">
+  <img src="https://github.com/fpaludi/BooksFastAPI/workflows/Test/badge.svg">
+  </a>
+  <a href="https://codecov.io/gh/fpaludi/BooksFastAPI">
+  <img src="https://img.shields.io/codecov/c/github/fpaludi/BooksFastAPI">
+  </a>
+</p>
 
 
 # Book API

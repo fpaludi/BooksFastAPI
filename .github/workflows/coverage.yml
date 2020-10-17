@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - 'master'
-name: coverage
+name: Test
 jobs:
   coverage:
     name: coverage
@@ -28,4 +28,4 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         file: app/coverage.xml
-        # token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }}
