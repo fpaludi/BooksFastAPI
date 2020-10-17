@@ -26,6 +26,7 @@ jobs:
 
   coverage:
     name: coverage app 
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - run: make run_tests_no_html
