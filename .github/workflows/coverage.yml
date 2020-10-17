@@ -27,7 +27,5 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./app/coverage.xml
-        flags: unittests
-    - run: bash <(curl -s https://codecov.io/bash)
+        file: app/coverage.xml
+        # token: ${{ secrets.CODECOV_TOKEN }}
