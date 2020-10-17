@@ -1,6 +1,7 @@
-import os
 import pytest
+from dotenv import dotenv_values
 from fastapi.testclient import TestClient
+from pydantic import PostgresDsn  # noqa
 from abc import ABC
 from app_factory import app_factory
 from settings import settings
@@ -9,11 +10,26 @@ from tests.integration.fake_mock_data import DBTestingData
 
 
 def pytest_configure():
-    print("INITIAL Test configuration")
+    print("\nINITIAL Test configuration")
     print("Upload Setting object for testing pourposes")
-    DATABASE_URI = os.environ.get("DATABASE_TEST_URI")
-    settings.DATABASE_URI = DATABASE_URI
-    if settings.DATABASE_URI != DATABASE_URI:
+
+    dotenv_path = ".test.env"
+    test_env = dotenv_values(dotenv_path)
+    TEST_POSTGRES_SERVER = test_env.get("POSTGRES_SERVER")
+    TEST_POSTGRES_USER = test_env.get("POSTGRES_USER")
+    TEST_POSTGRES_PASSWORD = test_env.get("POSTGRES_PASSWORD")
+    TEST_POSTGRES_DB = test_env.get("POSTGRES_DB")
+    TEST_DATABASE_URI = PostgresDsn.build(
+        scheme="postgresql",
+        user=TEST_POSTGRES_USER,
+        password=TEST_POSTGRES_PASSWORD,
+        host=TEST_POSTGRES_SERVER,
+        path=f"/{TEST_POSTGRES_DB or ''}",
+    )
+
+    settings.DATABASE_URI = TEST_DATABASE_URI
+    print(settings.DATABASE_URI)
+    if settings.DATABASE_URI != TEST_DATABASE_URI:
         raise ValueError("Tests are not using testing database")
 
 
@@ -24,7 +40,10 @@ class BaseTestControllers(ABC):
         app = app_factory()
 
         # Create DB for testing
-        self.delete_testing_database()
+        try:
+            self.delete_testing_database()
+        except:  # noqa
+            pass
         self.create_testing_database()
 
         # "Running"
@@ -80,6 +99,8 @@ class BaseTestControllers(ABC):
             )
             uow.repository.add_review(new_review)
             uow.commit()
+        session.close()  # noqa
+        engine.dispose()
         print("-" * 80)
 
     def delete_testing_database(self):
@@ -92,6 +113,8 @@ class BaseTestControllers(ABC):
         engine = RepositoryContainer.engine()
         session = RepositoryContainer.DEFAULT_SESSIONFACTORY()
         delete_tables(engine, session)
+        session.close()  # noqa
+        engine.dispose()
         print("-" * 80)
 
     # @classmethod
