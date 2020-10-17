@@ -23,8 +23,11 @@ The project that system has installed:
   * Python >= 3.7
 
 ### Running with docker
-The first step is to build the images for the project. In the terminal run 
-(it can take several minutes):
+The first step is to create a **app/.env** file, for that it is recommended to use
+**app/.example.env** as a guide.
+
+Then, it is necessary to build the images for the project. From the project root 
+path run (it can take several minutes):
 
 ```bash
 make build
