@@ -44,6 +44,11 @@ run_tests: up_dev
 	--cov src/ \
 	--cov-report html --cov-report term
 
+run_tests_nohtml: up_dev
+	$(DEV_COMPOSE_CMD) exec api pytest tests/ -vv -s -x \
+	--cov src/ \
+	--cov-report term
+
 stop_dev:
 	$(DEV_COMPOSE_CMD) down --remove-orphans
 
