@@ -23,7 +23,7 @@ jobs:
         envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
         file_name: app/.dev.env
     - run: make build_dev
-    - run: make run_tests_nohtml
+    - run: make run_tests_ci
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

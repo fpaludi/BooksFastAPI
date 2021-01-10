@@ -6,7 +6,7 @@ RUN cd /app/
 RUN python -m pip install --upgrade pip
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
-RUN poetry install
+RUN poetry install -vv
 
 ## Adding necessary scripts
 COPY scripts/prestart.sh /app/
