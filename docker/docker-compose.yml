@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  api:
+    image: "books.fast:latest"
+    depends_on:
+      - db
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    command: /start-reload.sh
+
+  db:
+    image: "postgres:13"
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+
+networks:
+  default:
+    external:
+      name: $NETWORK_NAME

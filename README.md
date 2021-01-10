@@ -49,7 +49,7 @@ make build
 One you have the images created you can start the API by running:
 
 ```bash
-make run_api
+make run
 ```
 
 and in you browser access to **http://127.0.0.1:8000/docs**. This URL provides
@@ -57,8 +57,21 @@ documentation about the different endpoints available. Also, note that the code 
 mounted in the docker container as volume, so it is possible to develop the 
 application without rebuilding the images with each code change.
 
-Other alternative is to evaluate the API tests and coverage. You can do it by:
 
+Finally you can stop it with simply running:
+```bash
+make stop
+```
+
+### Running with docker: Development and testing
+Other alternative is to run the API with development and testing purposes. In order to do that you need to run: 
+
+```bash
+make build_dev
+make run_dev
+```
+
+The test are run with
 ```bash
 make run_tests
 ```
@@ -102,8 +115,7 @@ All the dependencies and hooks can be installed and configured easily by running
 (assuming you have python >= 3.7 already installed):
 
 ```bash
-source scripts/start_project.sh
+make start_project
 ```
 
 ## Next Steps
-Adding continuous integration process by using GitHub Actions

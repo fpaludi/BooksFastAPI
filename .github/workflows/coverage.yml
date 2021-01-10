@@ -12,7 +12,7 @@ jobs:
     - name: Create app/.env file
       uses: SpicyPizza/create-envfile@v1
       with:
-        envkey_POSTGRES_SERVER: devdb
+        envkey_POSTGRES_SERVER: db
         envkey_POSTGRES_USER: fastapiuser
         envkey_POSTGRES_PASSWORD: fastapipass
         envkey_POSTGRES_DB: books_dev
@@ -21,9 +21,9 @@ jobs:
         envkey_GOODREAD_API_URL: "https://www.goodreads.com/book/review_counts.json"
         envkey_GOODREAD_API_KEY: ${{ secrets.GOODREAD_API_KEY }}
         envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        file_name: app/.env
-    - run: make build
-    - run: make run_tests_no_html
+        file_name: app/.dev.env
+    - run: make build_dev
+    - run: make run_tests
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
