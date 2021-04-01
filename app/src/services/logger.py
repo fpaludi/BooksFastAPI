@@ -1,53 +1,80 @@
 import logging
-import sys
-from logging.handlers import TimedRotatingFileHandler
+import logging.config
+import structlog
+from settings import settings
 
 
-class LoggerBuilder:
+def configure_logger():
+    """Configure the logger to use throughout the project
 
-    _LOG_TYPE_MAPPER = {
-        "info": logging.INFO,
-        "debug": logging.DEBUG,
-        "error": logging.ERROR,
-        "warning": logging.WARNING,
-    }
+    Uses these variables from settings:
+        LOG_LEVEL -- The loglevel to use
+    """
 
-    _DEFAULT_FORMATTER = logging.Formatter(
-        "[%(asctime)s — %(filename)s:%(lineno)s — %(funcName)s() — %(levelname)s] %(message)s"
+    logging.config.dictConfig({
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "plain": {
+                "()": structlog.stdlib.ProcessorFormatter,
+                "processor": structlog.processors.JSONRenderer(sort_keys=True),
+            },
+            "colored": {
+                "()": structlog.stdlib.ProcessorFormatter,
+                "processor": structlog.dev.ConsoleRenderer(colors=True),
+            },
+        },
+        "handlers": {
+            "default": {
+                "level": settings.LOG_LEVEL,
+                "class": "logging.StreamHandler",
+                "formatter": "colored",
+            },
+            "file": {
+                "level": settings.LOG_LEVEL,
+                "class": "logging.handlers.TimedRotatingFileHandler",
+                "filename": settings.LOG_FILE,
+                "when": "d",
+                "backupCount": 3,
+                "formatter": "plain",
+            },
+        },
+        "loggers": {
+            "dv": {
+                "handlers": ["default", "file"],
+                "level": settings.LOG_LEVEL,
+                "propagate": True,
+            },
+        }
+    })
+    structlog.configure(
+        processors=[
+            structlog.stdlib.add_logger_name,
+            structlog.stdlib.add_log_level,
+            structlog.stdlib.PositionalArgumentsFormatter(),
+            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.processors.StackInfoRenderer(),
+            structlog.processors.format_exc_info,
+            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+        ],
+        context_class=dict,
+        logger_factory=structlog.stdlib.LoggerFactory(),
+        wrapper_class=structlog.stdlib.BoundLogger,
+        cache_logger_on_first_use=True,
     )
 
-    def __init__(
-        self,
-        module,
-        log_type="info",
-        format_str="",
-        use_file=False,
-        log_file_name="my_app.log",
-    ):
 
-        self._log_type = self._LOG_TYPE_MAPPER[log_type]
-        self._file_name = log_file_name
-        self._format = format_str
-        if format_str == "":
-            self._format = self._DEFAULT_FORMATTER
-        self._logger = logging.getLogger(module)
-        self._logger.setLevel(
-            logging.INFO
-        )  # better to have too much log than not enough
-        self._logger.addHandler(self._get_console_handler())
-        if use_file:
-            self._logger.addHandler(self._get_file_handler())
-        self._logger.propagate = False
+def get_logger(name: str) -> logging.Logger:
+    """ Returns a logger object with proper name
 
-    def _get_console_handler(self):
-        handler = logging.StreamHandler(sys.stdout)
-        handler.setFormatter(self._format)
-        return handler
+    Parameters
+    ----------
+    name : str
+        name of the logger
 
-    def _get_file_handler(self):
-        handler = TimedRotatingFileHandler(self._file_name, when="midnight")
-        handler.setFormatter(self._format)
-        return handler
-
-    def get_logger(self):
-        return self._logger
+    Returns
+    -------
+    logging.Logger
+        logger object
+    """
+    return structlog.get_logger(f"logger.{name}")
