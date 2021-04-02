@@ -9,9 +9,7 @@ from src.api.exceptions import BookAlreadyReviewed
 
 class BookService:
     def __init__(
-        self,
-        crud_book: CRUDBook,
-        crud_review: CRUDReview,
+        self, crud_book: CRUDBook, crud_review: CRUDReview,
     ):
         self._crud_book = crud_book
         self._crud_review = crud_review
@@ -25,11 +23,7 @@ class BookService:
         return book
 
     def insert_book_review(
-        self,
-        book: Book,
-        user: User,
-        review_value: int,
-        review_comment: str
+        self, book: Book, user: User, review_value: int, review_comment: str
     ) -> Optional[Review]:
         if not book.reviewed_by_user(user):
             new_review = ReviewCreate(

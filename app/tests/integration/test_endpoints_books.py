@@ -5,7 +5,6 @@ from tests.integration.fake_mock_data import DBTestingData
 
 
 class TestEndpointBooks(BaseTestControllers):
-
     def test_api_search_books(self, client):
         username = DBTestingData.TEST_USER
         password = DBTestingData.TEST_PSW
@@ -51,9 +50,6 @@ class TestEndpointBooks(BaseTestControllers):
         username = DBTestingData.TEST_USER
         password = DBTestingData.TEST_PSW
         auth_str = get_authorization_string(client, username, password)
-        response = client.get(
-            "/books/1",
-            headers={"Authorization": auth_str},
-        )
+        response = client.get("/books/1", headers={"Authorization": auth_str},)
         assert response.status_code == 200
         assert response.json()["isbn"] == "0380795272"

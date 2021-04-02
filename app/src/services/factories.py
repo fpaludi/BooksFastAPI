@@ -14,19 +14,13 @@ from src.services.external_api_service import GoodReadApiService
 
 class ServicesContainer(containers.DeclarativeContainer):
     book_service_factory = providers.Factory(
-        BookService,
-        crud_book=CRUDBookFactory,
-        crud_review=CRUDReviewFactory,
+        BookService, crud_book=CRUDBookFactory, crud_review=CRUDReviewFactory,
     )
 
     auth_service_factory = providers.Factory(
-        AuthenticationService,
-        tokenizer=JWTTokenizer(),
-        crud_user=CRUDUserFactory,
+        AuthenticationService, tokenizer=JWTTokenizer(), crud_user=CRUDUserFactory,
     )
 
     goodread_service_factory = providers.Factory(
-        GoodReadApiService,
-        settings.GOODREAD_API_URL,
-        settings.GOODREAD_API_KEY,
+        GoodReadApiService, settings.GOODREAD_API_URL, settings.GOODREAD_API_KEY,
     )

@@ -9,18 +9,13 @@ from src.schemas.book import Book, BookCreate, BookUpdate
 class CRUDBook(CRUDBase[BookDbModel, Book, BookCreate, BookUpdate]):
     def get_by_column(self, column_name: str, value: Any) -> List[Book]:
         insp = inspect(BookDbModel)
-        books_db = self.db.query(BookDbModel).filter(
-            insp.all_orm_descriptors[column_name].like(f"%{value}%")
-        ).all()
-        books_schema = [
-            self.schema.from_orm(book)
-            for book in books_db
-        ]
+        books_db = (
+            self.db.query(BookDbModel)
+            .filter(insp.all_orm_descriptors[column_name].like(f"%{value}%"))
+            .all()
+        )
+        books_schema = [self.schema.from_orm(book) for book in books_db]
         return books_schema
 
 
-CRUDBookFactory = Factory(
-    CRUDBook,
-    model=BookDbModel,
-    schema=Book
-)
+CRUDBookFactory = Factory(CRUDBook, model=BookDbModel, schema=Book)

@@ -1,4 +1,3 @@
-
 from sqlalchemy import (
     Boolean,
     Column,
@@ -9,7 +8,7 @@ from src.db.base_class import Base
 
 
 class User(Base):
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)  # noqa
     username = Column(String, nullable=False, unique=True)
     confirmed = Column(Boolean, default=False)
     is_superuser = Column(Boolean(), default=False)

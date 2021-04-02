@@ -40,6 +40,7 @@ def pytest_configure():
     settings.LOG_LEVEL = "DEBUG"
     settings.LOG_FILE = "test.log"
 
+
 class BaseTestControllers(ABC):
     @pytest.fixture(scope="class")
     def client(self):
@@ -78,13 +79,12 @@ class BaseTestControllers(ABC):
         create_tables(engine, session)
 
         # Add User and Review
-        crud_user   = CRUDUserFactory(session_db=session)
-        crud_book   = CRUDBookFactory(session_db=session)
+        crud_user = CRUDUserFactory(session_db=session)
+        crud_book = CRUDBookFactory(session_db=session)
         crud_review = CRUDReviewFactory(session_db=session)
 
         new_user = user.UserCreate(
-            username=DBTestingData.TEST_USER,
-            password=DBTestingData.TEST_PSW,
+            username=DBTestingData.TEST_USER, password=DBTestingData.TEST_PSW,
         )
         user1 = crud_user.create(obj_in=new_user)
         book1 = crud_book.get_by_column("title", DBTestingData.BOOK_TITLE_W_REVIEW)[0]

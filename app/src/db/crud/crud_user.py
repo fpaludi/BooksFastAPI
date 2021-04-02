@@ -9,9 +9,10 @@ from src.core.security import get_password_hash
 
 
 class CRUDUser(CRUDBase[UserDbModel, User, UserCreate, UserUpdate]):
-
-    def get_by_username(self,*, username: str) -> Optional[User]:
-        db_obj = self.db.query(UserDbModel).filter(UserDbModel.username == username).first()
+    def get_by_username(self, *, username: str) -> Optional[User]:
+        db_obj = (
+            self.db.query(UserDbModel).filter(UserDbModel.username == username).first()
+        )
         return self.schema.from_orm(db_obj) if db_obj else db_obj
 
     def create(self, *, obj_in: UserCreate) -> User:
@@ -45,8 +46,4 @@ class CRUDUser(CRUDBase[UserDbModel, User, UserCreate, UserUpdate]):
         return user.is_superuser
 
 
-CRUDUserFactory = Factory(
-    CRUDUser,
-    model=UserDbModel,
-    schema=User
-)
+CRUDUserFactory = Factory(CRUDUser, model=UserDbModel, schema=User)

@@ -6,11 +6,7 @@ from src.core.security import Tokenizer
 
 
 class AuthenticationService:
-    def __init__(
-        self,
-        crud_user: CRUDUser,
-        tokenizer: Tokenizer
-    ):
+    def __init__(self, crud_user: CRUDUser, tokenizer: Tokenizer):
         self._crud_user = crud_user
         self._tokenizer = tokenizer
 
@@ -41,7 +37,5 @@ class AuthenticationService:
         username = self._tokenizer.decode_access_token(token)
         user = None
         if username:
-            user = self._crud_user.get_by_username(
-                username=username,
-            )
+            user = self._crud_user.get_by_username(username=username,)
         return user

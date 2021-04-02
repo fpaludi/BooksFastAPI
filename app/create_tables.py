@@ -2,6 +2,7 @@ import contextlib
 import pandas as pd
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
+
 # from src.db.models.orm import metadata, start_mappers
 from src.db.models.book import Book
 from src.db.base_class import Base
@@ -52,6 +53,6 @@ if __name__ == "__main__":
 
     session = SessionLocal()
     create_tables(engine, session)
-    #delete_tables(engine, session)
+    # delete_tables(engine, session)
     session.close()  # noqa
     engine.dispose()

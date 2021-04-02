@@ -26,7 +26,7 @@ class ReviewUpdate(ReviewCreate):
 
 
 class ReviewInDBBase(ReviewBase):
-    id: Optional[int] = None
+    id: Optional[int] = None  # noqa
     user_id: Optional[int] = None
     book_id: Optional[int] = None
 

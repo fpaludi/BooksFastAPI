@@ -77,10 +77,7 @@ class TestBookService(BaseTestService):
 
         # Method under test
         response = book_service.insert_book_review(
-            book,
-            user,
-            expected.review_value,
-            expected.review_comment
+            book, user, expected.review_value, expected.review_comment
         )
 
         # Assertions
@@ -92,12 +89,7 @@ class TestBookService(BaseTestService):
         book = mock_io_data.book1  # book has reviews form users 1 and 2
 
         # Method under test
-        response = book_service.insert_book_review(
-            book,
-            user,
-            4,
-            "Good book",
-        )
+        response = book_service.insert_book_review(book, user, 4, "Good book",)
 
         # Assertions
         assert response == None

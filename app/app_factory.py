@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from settings import settings  # noqa
 from logger import configure_logger
 
+
 def app_factory():
     configure_logger()
     app = FastAPI(title="BooksAPI",)

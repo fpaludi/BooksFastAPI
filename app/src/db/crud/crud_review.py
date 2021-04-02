@@ -8,8 +8,4 @@ class CRUDReview(CRUDBase[ReviewDbModel, Review, ReviewCreate, ReviewUpdate]):
     pass
 
 
-CRUDReviewFactory = Factory(
-    CRUDReview,
-    model=ReviewDbModel,
-    schema=Review
-)
+CRUDReviewFactory = Factory(CRUDReview, model=ReviewDbModel, schema=Review)

@@ -61,7 +61,7 @@ def insert_book_review(
             book=book_to_rev,
             user=curret_user,
             review_value=review.review_value,
-            review_comment=review.review_comment
+            review_comment=review.review_comment,
         )
         if not new_review:
             raise BookAlreadyReviewed

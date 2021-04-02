@@ -8,6 +8,7 @@ from settings import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -32,9 +33,7 @@ class JWTTokenizer(Tokenizer):
     _SUB_KEY = "sub"
 
     def create_access_token(
-        self,
-        subject: Union[str, Any],
-        expires_delta: timedelta = None
+        self, subject: Union[str, Any], expires_delta: timedelta = None
     ) -> str:
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
@@ -44,17 +43,11 @@ class JWTTokenizer(Tokenizer):
             )
         to_encode = {self._EXP_KEY: expire, self._SUB_KEY: str(subject)}
         encoded_jwt = jwt.encode(
-            to_encode,
-            settings.SECRET_KEY,
-            algorithm=self._ALGORITHM
+            to_encode, settings.SECRET_KEY, algorithm=self._ALGORITHM
         )
         return encoded_jwt
 
     def decode_access_token(self, token: str) -> Optional[str]:
-        payload = jwt.decode(
-            token,
-            settings.SECRET_KEY,
-            algorithms=[self._ALGORITHM]
-        )
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[self._ALGORITHM])
         username = payload.get(self._SUB_KEY)
         return username

@@ -35,35 +35,30 @@ class CRUDAbstract(abc.ABC):
         pass
 
 
-class CRUDBase(CRUDAbstract, Generic[ModelType, SchemaType, CreateSchemaType, UpdateSchemaType]):
+class CRUDBase(
+    CRUDAbstract, Generic[ModelType, SchemaType, CreateSchemaType, UpdateSchemaType]
+):
     """
     CRUD object with default methods to Create, Read, Update, Delete (CRUD).
     **Parameters**
     * model: A SQLAlchemy model class
     * schema: A Pydantic model (schema) class
     """
+
     def __init__(
-        self,
-        session_db: Session,
-        model: Type[ModelType],
-        schema: Type[SchemaType]
+        self, session_db: Session, model: Type[ModelType], schema: Type[SchemaType]
     ):
         self.db = session_db
         self.model = model
         self.schema = schema
 
-    def get(self, id: Any) -> Optional[SchemaType]:
-        db_obj = self.db.query(self.model).filter(self.model.id == id).first()
+    def get(self, id_db: Any) -> Optional[SchemaType]:
+        db_obj = self.db.query(self.model).filter(self.model.id == id_db).first()
         return self.schema.from_orm(db_obj) if db_obj else db_obj
 
-    def get_multi(
-        self, *, skip: int = 0, limit: int = 100
-    ) -> List[SchemaType]:
+    def get_multi(self, *, skip: int = 0, limit: int = 100) -> List[SchemaType]:
         db_obj = self.db.query(self.model).offset(skip).limit(limit).all()
-        schema_obj = [
-            self.schema.from_orm(x)
-            for x in db_obj
-        ]
+        schema_obj = [self.schema.from_orm(x) for x in db_obj]
         return schema_obj
 
     def create(self, *, obj_in: CreateSchemaType) -> SchemaType:
@@ -75,10 +70,7 @@ class CRUDBase(CRUDAbstract, Generic[ModelType, SchemaType, CreateSchemaType, Up
         return self.schema.from_orm(db_obj)
 
     def update(
-        self,
-        *,
-        db_obj: ModelType,
-        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+        self, *, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]
     ) -> SchemaType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
@@ -93,8 +85,8 @@ class CRUDBase(CRUDAbstract, Generic[ModelType, SchemaType, CreateSchemaType, Up
         self.db.refresh(db_obj)
         return self.schema.from_orm(db_obj)
 
-    def delete(self, *, id: int) -> SchemaType:
-        db_obj = self.db.query(self.model).get(id)
+    def delete(self, *, id_db: int) -> SchemaType:
+        db_obj = self.db.query(self.model).get(id_db)
         self.db.delete(db_obj)
         self._commit()
         return self.schema.from_orm(db_obj)

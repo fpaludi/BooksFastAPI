@@ -2,7 +2,7 @@ import pytest
 import mock
 from abc import ABC
 from sqlalchemy.orm import sessionmaker, Session
-from src.services import  (
+from src.services import (
     BookService,
     GoodReadApiService,
     AuthenticationService,
@@ -14,6 +14,7 @@ from src.db import (
 )
 from src.schemas import user, review, user
 from src.core.security import Tokenizer
+
 
 class BaseTestService(ABC):
     def teardown_method(self):
@@ -36,15 +37,10 @@ class BaseTestService(ABC):
         return mock.create_autospec(Tokenizer)
 
     @pytest.fixture(scope="function")
-    def book_service(
-        self,
-        crud_book_mock: CRUDBook,
-        crud_review_mock: CRUDReview
-    ):
+    def book_service(self, crud_book_mock: CRUDBook, crud_review_mock: CRUDReview):
         # Service
         book_service = BookService(
-            crud_book=crud_book_mock,
-            crud_review=crud_review_mock,
+            crud_book=crud_book_mock, crud_review=crud_review_mock,
         )
 
         # lambdas
@@ -55,14 +51,11 @@ class BaseTestService(ABC):
 
     @pytest.fixture(scope="function")
     def authentication_service(
-        self,
-        crud_user_mock: CRUDUser,
-        tokenizer_mock: Tokenizer,
+        self, crud_user_mock: CRUDUser, tokenizer_mock: Tokenizer,
     ):
         # Service
         authentication_service = AuthenticationService(
-            crud_user=crud_user_mock,
-            tokenizer=tokenizer_mock
+            crud_user=crud_user_mock, tokenizer=tokenizer_mock
         )
 
         # Lambdas

@@ -27,7 +27,7 @@ class UserUpdate(UserBase):
 
 
 class UserInDBBase(UserBase):
-    id: Optional[int] = None
+    id: Optional[int] = None  # noqa
 
     class Config:
         orm_mode = True
@@ -45,6 +45,5 @@ class User(UserInDBBase):
 class UserInDB(UserInDBBase):
     password_hash: str
 
-    #def validate_pass(self, password):
+    # def validate_pass(self, password):
     #    return pwd_context.verify(password, self.password_hash)
-

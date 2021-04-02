@@ -27,7 +27,7 @@ class BookUpdate(BookBase):
 
 # Properties shared by models stored in DB
 class BookInDBBase(BookBase):
-    id: int
+    id: int  # noqa
 
     class Config:
         orm_mode = True
@@ -35,12 +35,10 @@ class BookInDBBase(BookBase):
 
 # Properties to return to client
 class Book(BookInDBBase):
-
     def reviewed_by_user(self, user: User) -> bool:
-        reviewers = [
-            review.user_id for review in self.reviews
-        ]
+        reviewers = [review.user_id for review in self.reviews]
         return user.id in reviewers
+
 
 # Additional properties stored in DB
 class BookInDB(BookInDBBase):

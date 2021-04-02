@@ -11,42 +11,44 @@ def configure_logger():
         LOG_LEVEL -- The loglevel to use
     """
 
-    logging.config.dictConfig({
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "plain": {
-                "()": structlog.stdlib.ProcessorFormatter,
-                "processor": structlog.processors.JSONRenderer(sort_keys=True),
+    logging.config.dictConfig(
+        {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "formatters": {
+                "plain": {
+                    "()": structlog.stdlib.ProcessorFormatter,
+                    "processor": structlog.processors.JSONRenderer(sort_keys=True),
+                },
+                "colored": {
+                    "()": structlog.stdlib.ProcessorFormatter,
+                    "processor": structlog.dev.ConsoleRenderer(colors=True),
+                },
             },
-            "colored": {
-                "()": structlog.stdlib.ProcessorFormatter,
-                "processor": structlog.dev.ConsoleRenderer(colors=True),
+            "handlers": {
+                "default": {
+                    "level": settings.LOG_LEVEL,
+                    "class": "logging.StreamHandler",
+                    "formatter": "colored",
+                },
+                "file": {
+                    "level": settings.LOG_LEVEL,
+                    "class": "logging.handlers.TimedRotatingFileHandler",
+                    "filename": settings.LOG_FILE,
+                    "when": "d",
+                    "backupCount": 3,
+                    "formatter": "plain",
+                },
             },
-        },
-        "handlers": {
-            "default": {
-                "level": settings.LOG_LEVEL,
-                "class": "logging.StreamHandler",
-                "formatter": "colored",
-            },
-            "file": {
-                "level": settings.LOG_LEVEL,
-                "class": "logging.handlers.TimedRotatingFileHandler",
-                "filename": settings.LOG_FILE,
-                "when": "d",
-                "backupCount": 3,
-                "formatter": "plain",
-            },
-        },
-        "loggers": {
-            "log": {
-                "handlers": ["default", "file"],
-                "level": settings.LOG_LEVEL,
-                "propagate": False,
+            "loggers": {
+                "log": {
+                    "handlers": ["default", "file"],
+                    "level": settings.LOG_LEVEL,
+                    "propagate": False,
+                },
             },
         }
-    })
+    )
     structlog.configure(
         processors=[
             structlog.stdlib.add_logger_name,

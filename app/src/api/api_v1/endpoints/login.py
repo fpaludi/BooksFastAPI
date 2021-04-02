@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 @router.post("/token", response_model=Token)
 def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    auth_service: AuthenticationService = Depends(get_auth_service)
+    auth_service: AuthenticationService = Depends(get_auth_service),
 ):
     access_token = auth_service.create_access_token(
         form_data.username, form_data.password
@@ -33,7 +33,7 @@ def login_for_access_token(
 @router.post("/sign_in", response_model=user.UserBase)
 def sign_in(
     user: user.UserCreateForm,
-    auth_service: AuthenticationService = Depends(get_auth_service)
+    auth_service: AuthenticationService = Depends(get_auth_service),
 ):
     user = auth_service.sign_in(**user.dict())
     if not user:

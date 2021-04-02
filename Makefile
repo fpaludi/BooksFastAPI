@@ -22,7 +22,7 @@ DEV_COMPOSE_CMD=docker-compose -f $(CURDIR)/$(BASE_FILE) -f $(CURDIR)/$(DEV_FILE
 
 create_network:
 	@if [ -z $(NETWORKS) ]; then \
-		echo "${GREEN}Creating network '$(NETWORK_NAME)'${NC}"; \
+		printf "${GREEN}Creating network '$(NETWORK_NAME)'${NC}"; \
 		docker network create $(NETWORK_NAME); \
 	fi;
 
@@ -61,18 +61,18 @@ stop_dev:
 	$(DEV_COMPOSE_CMD) down --remove-orphans
 
 start_project:
-	@echo '${GREEN} Installing, creating and activiting virtualenv... ${NC}';
+	@printf '${GREEN} Installing, creating and activiting virtualenv... ${NC}\n';
 	@pip3 install virtualenv==20.1.0  > /dev/null;
 	@pip3 install importlib-metadata==1.7.0  > /dev/null;
 	@python3 -m virtualenv .venv --python $(PYTHON_PATH)  > /dev/null;
 	@source .venv/bin/activate
 
-	@echo '${GREEN} Installing and configuring poetry... ${NC}';
+	@printf '${GREEN} Installing and configuring poetry... ${NC}\n';
 	@pip3 install poetry > /dev/null;
 	@poetry config virtualenvs.create true --local;
 	@poetry config virtualenvs.in-project true --local;
 
-	@echo '${GREEN} Installing project dependencies... ${NC}';
+	@printf '${GREEN} Installing project dependencies... ${NC}\n';
 	@poetry install -vv;
-	@echo '${GREEN} Configuring pre-commit hooks... ${NC}';
-	@pre-commit install;
+	@printf '${GREEN} Configuring pre-commit hooks... ${NC}\n';
+	source .venv/bin/activate && pre-commit install

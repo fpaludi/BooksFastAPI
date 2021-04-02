@@ -29,9 +29,7 @@ def get_db() -> Generator:
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     db = next(get_db())
-    auth_service = ServicesContainer.auth_service_factory(
-        crud_user__session_db=db
-    )
+    auth_service = ServicesContainer.auth_service_factory(crud_user__session_db=db)
     user = auth_service.get_current_user(token)
     if not user:
         raise CredentialException
@@ -40,17 +38,14 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
 
 def get_auth_service() -> AuthenticationService:
     db = next(get_db())
-    auth_service = ServicesContainer.auth_service_factory(
-        crud_user__session_db=db
-    )
+    auth_service = ServicesContainer.auth_service_factory(crud_user__session_db=db)
     return auth_service
 
 
 def get_book_service() -> BookService:
     db = next(get_db())
     book_service = ServicesContainer.book_service_factory(
-        crud_book__session_db=db,
-        crud_review__session_db=db,
+        crud_book__session_db=db, crud_review__session_db=db,
     )
     return book_service
 
