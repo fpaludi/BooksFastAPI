@@ -8,3 +8,4 @@ __pycache__
 htmlcov
 my_app.log
 sandbox
+app/tests*

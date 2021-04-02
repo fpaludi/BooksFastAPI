@@ -14,6 +14,7 @@ DEV_FILE=docker/docker-compose-dev.yml
 PROD_COMPOSE_CMD=docker-compose -f $(CURDIR)/$(BASE_FILE)
 DEV_COMPOSE_CMD=docker-compose -f $(CURDIR)/$(BASE_FILE) -f $(CURDIR)/$(DEV_FILE)
 
+
 create_network:
 	@if [ -z $(NETWORKS) ]; then \
 		echo "${GREEN}Creating network '$(NETWORK_NAME)'${NC}"; \
@@ -40,7 +41,7 @@ run_tests: run_dev
 	--cov src/ \
 	--cov-report html --cov-report term
 
-run_tests_no_html: up
+run_tests_ci: up
 	$(DEV_COMPOSE_CMD) exec -T api pytest tests/ -vv -s \
 	--cov src/ \
 	--cov-report=xml
@@ -54,5 +55,20 @@ stop:
 stop_dev:
 	$(DEV_COMPOSE_CMD) down --remove-orphans
 
-all_tests: down build run_tests
-all_run: down build run_api
+
+start_project:
+	@echo '${GREEN}Installing, creating and activiting virtualenv...${NC}';
+	@pip3 install virtualenv > /dev/null;
+	@python3 -m virtualenv .venv --python $(PYTHON_PATH) > /dev/null;
+	$(shell source .venv/bin/activate)
+
+	@echo '${GREEN}Installing and configuring poetry...${NC}';
+	@pip3 install poetry > /dev/null;
+	@poetry config virtualenvs.create true;
+	@poetry config virtualenvs.in-project false;
+
+	@echo '${GREEN}Installing project dependencies...${NC}';
+	@poetry install -vv;
+	@echo '${GREEN}Configuring pre-commit hooks...${NC}';
+	@pre-commit install;	@echo '${GREEN}Configuring pre-commit hooks...${NC}';
+	@pre-commit install;
