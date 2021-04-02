@@ -1,7 +1,7 @@
 import requests
 
 
-class ExternalApiService:
+class GoodReadApiService:
     def __init__(self, api_url, api_key):
         self._GOODREAD_API_URL = api_url
         self._GOODREAD_API_KEY = api_key

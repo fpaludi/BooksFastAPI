@@ -1,17 +1,11 @@
 from fastapi import FastAPI
 from settings import settings  # noqa
-
+from logger import configure_logger
 
 def app_factory():
-    from src.db.models import orm
-
+    configure_logger()
     app = FastAPI(title="BooksAPI",)
+    from src.api.api_v1.api import api_router
 
-    from src.api.controllers import control
-
-    app.include_router(control)
-
-    # Start ORM Mappers
-    orm.start_mappers()
-
+    app.include_router(api_router)
     return app

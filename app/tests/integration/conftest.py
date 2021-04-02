@@ -1,10 +1,16 @@
+from abc import ABC
+from src.db.crud.crud_user import CRUDUser
 import pytest
 from dotenv import dotenv_values
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 from pydantic import PostgresDsn  # noqa
-from abc import ABC
 from app_factory import app_factory
 from settings import settings
+from src.schemas import user, book, review
+from src.db import CRUDBookFactory, CRUDUserFactory, CRUDReviewFactory
+from src.db import CRUDBook, CRUDUser, CRUDReview
 from create_tables import create_tables, delete_tables
 from tests.integration.fake_mock_data import DBTestingData
 
@@ -31,7 +37,8 @@ def pytest_configure():
     print(settings.DATABASE_URI)
     if settings.DATABASE_URI != TEST_DATABASE_URI:
         raise ValueError("Tests are not using testing database")
-
+    settings.LOG_LEVEL = "DEBUG"
+    settings.LOG_FILE = "test.log"
 
 class BaseTestControllers(ABC):
     @pytest.fixture(scope="class")
@@ -42,8 +49,8 @@ class BaseTestControllers(ABC):
         # Create DB for testing
         try:
             self.delete_testing_database()
-        except:  # noqa
-            pass
+        except Exception as exp:  # noqa
+            print(exp)
         self.create_testing_database()
 
         # "Running"
@@ -54,18 +61,11 @@ class BaseTestControllers(ABC):
             # Clean testing DB to start clean every run tests
             self.delete_testing_database()
 
-    @pytest.fixture(scope="function")
-    def unit_of_work(self):
-        from src.db.repositories.factories import RepositoryContainer
-
-        uow = RepositoryContainer.uow()
-        return uow
-
     def create_testing_database(self):
-        from src.db.repositories.factories import RepositoryContainer
+        engine = create_engine(settings.DATABASE_URI, pool_pre_ping=True)
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        session = SessionLocal()
 
-        engine = RepositoryContainer.engine()
-        session = RepositoryContainer.DEFAULT_SESSIONFACTORY()
         if "_test" not in str(engine.url):
             print("Tests are running over production or development database")
             print(f"Database url: {engine.url}")
@@ -76,42 +76,40 @@ class BaseTestControllers(ABC):
         print("TEST DB OPERATIONS")
         print("*" * 80)
         create_tables(engine, session)
-        uow = RepositoryContainer.uow()
 
-        # Add User
-        with uow:
-            new_user = dict(
-                username=DBTestingData.TEST_USER, password=DBTestingData.TEST_PSW
-            )
-            uow.repository.add_user(new_user)
-            uow.commit()
+        # Add User and Review
+        crud_user   = CRUDUserFactory(session_db=session)
+        crud_book   = CRUDBookFactory(session_db=session)
+        crud_review = CRUDReviewFactory(session_db=session)
 
-            # Add Review for User
-            user = uow.repository.get_username(DBTestingData.TEST_USER)
-            book = uow.repository.get_book_by_like(
-                "title", DBTestingData.BOOK_TITLE_W_REVIEW
-            )[0]
-            new_review = dict(
-                review_value="1",
-                review_comment="test comment",
-                user_id=user.id,
-                book_id=book.id,
-            )
-            uow.repository.add_review(new_review)
-            uow.commit()
+        new_user = user.UserCreate(
+            username=DBTestingData.TEST_USER,
+            password=DBTestingData.TEST_PSW,
+        )
+        user1 = crud_user.create(obj_in=new_user)
+        book1 = crud_book.get_by_column("title", DBTestingData.BOOK_TITLE_W_REVIEW)[0]
+        new_review = review.ReviewCreate(
+            review_value="1",
+            review_comment="test comment",
+            user_id=user1.id,
+            book_id=book1.id,
+        )
+        review1 = crud_review.create(obj_in=new_review)
+
         session.close()  # noqa
         engine.dispose()
         print("-" * 80)
 
     def delete_testing_database(self):
-        from src.db.repositories.factories import RepositoryContainer
+        engine = create_engine(settings.DATABASE_URI, pool_pre_ping=True)
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        session = SessionLocal()
 
         print()
         print("*" * 80)
         print("TEST DB OPERATIONS")
         print("*" * 80)
-        engine = RepositoryContainer.engine()
-        session = RepositoryContainer.DEFAULT_SESSIONFACTORY()
+
         delete_tables(engine, session)
         session.close()  # noqa
         engine.dispose()
