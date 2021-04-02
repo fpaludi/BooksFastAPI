@@ -1,7 +1,11 @@
+SHELL := /bin/bash
 # Just colors
 RED=\033[0;31m
 GREEN=\033[0;32m
 NC=\033[0m
+
+# Python
+PYTHON_PATH=$(shell which python3.7)
 
 # Network name (default: booksapi)
 NETWORK?=booksapi
@@ -56,20 +60,19 @@ stop:
 stop_dev:
 	$(DEV_COMPOSE_CMD) down --remove-orphans
 
-
 start_project:
-	@echo '${GREEN}Installing, creating and activiting virtualenv...${NC}';
-	@pip3 install virtualenv > /dev/null;
-	@python3 -m virtualenv .venv --python $(PYTHON_PATH) > /dev/null;
-	$(shell source .venv/bin/activate)
+	@echo '${GREEN} Installing, creating and activiting virtualenv... ${NC}';
+	@pip3 install virtualenv==20.1.0  > /dev/null;
+	@pip3 install importlib-metadata==1.7.0  > /dev/null;
+	@python3 -m virtualenv .venv --python $(PYTHON_PATH)  > /dev/null;
+	@source .venv/bin/activate
 
-	@echo '${GREEN}Installing and configuring poetry...${NC}';
+	@echo '${GREEN} Installing and configuring poetry... ${NC}';
 	@pip3 install poetry > /dev/null;
-	@poetry config virtualenvs.create true;
-	@poetry config virtualenvs.in-project false;
+	@poetry config virtualenvs.create true --local;
+	@poetry config virtualenvs.in-project true --local;
 
-	@echo '${GREEN}Installing project dependencies...${NC}';
+	@echo '${GREEN} Installing project dependencies... ${NC}';
 	@poetry install -vv;
-	@echo '${GREEN}Configuring pre-commit hooks...${NC}';
-	@pre-commit install;	@echo '${GREEN}Configuring pre-commit hooks...${NC}';
+	@echo '${GREEN} Configuring pre-commit hooks... ${NC}';
 	@pre-commit install;
