@@ -1,10 +1,8 @@
-from src.db.models.review import Review
-from typing import List, Tuple, Optional
+from typing import List, Optional
+from src.db import CRUDBook, CRUDReview
 from src.schemas.book import Book
 from src.schemas.user import User
 from src.schemas.review import ReviewCreate, Review
-from src.db import CRUDBook, CRUDReview
-from src.api.exceptions import BookAlreadyReviewed
 
 
 class BookService:
