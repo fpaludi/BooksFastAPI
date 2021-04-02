@@ -1,37 +1,23 @@
 version: "3.7"
 services:
   api:
-    image: "books.fast:prod"
+    image: "books.fast:latest"
     depends_on:
-        - db
-    ports:
-      - 8000:80
-    env_file:
-      - ../app/.env
+      - db
     build:
       context: ../
       dockerfile: docker/Dockerfile
+    command: /start-reload.sh
 
   db:
     image: "postgres:13"
-    volumes:
-      - app-bookdb-data:/var/lib/postgresql/data/pgdata
-    env_file:
-      - ../app/.env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
 
   pgadmin:
     image: dpage/pgadmin4
-    ports:
-      - 5050:80
     depends_on:
       - db
-    env_file:
-      - ../app/.env
-
-volumes:
-  app-bookdb-data:
 
 networks:
   default:
