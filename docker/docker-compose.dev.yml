@@ -24,10 +24,6 @@ services:
     image: "postgres:13"
     env_file:
       - ../app/.test.env
-    volumes:
-      - app-db-data-test:/var/lib/postgresql/data/pgdata
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
 
   pgadmin:
     image: dpage/pgadmin4

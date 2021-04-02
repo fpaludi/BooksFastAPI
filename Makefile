@@ -10,8 +10,8 @@ NETWORKS=$(shell docker network ls --filter name=^${NETWORK_NAME} --format="{{ .
 
 # Compose Files
 BASE_FILE=docker/docker-compose.yml
-DEV_FILE=docker/docker-compose-dev.yml
-PROD_FILE=docker/docker-compose.dev.yml
+DEV_FILE=docker/docker-compose.dev.yml
+PROD_FILE=docker/docker-compose.prod.yml
 PROD_COMPOSE_CMD=docker-compose -f $(CURDIR)/$(BASE_FILE) -f $(CURDIR)/$(PROD_FILE)
 DEV_COMPOSE_CMD=docker-compose -f $(CURDIR)/$(BASE_FILE) -f $(CURDIR)/$(DEV_FILE)
 

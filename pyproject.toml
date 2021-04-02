@@ -21,6 +21,8 @@ python-multipart = "0.0.5"
 passlib = "1.7.2"
 bcrypt = "3.2.0"
 python-jose = "3.2.0"
+structlog = "21.1.0"
+colorama = "0.4.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
