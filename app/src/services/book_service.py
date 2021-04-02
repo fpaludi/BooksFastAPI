@@ -19,7 +19,7 @@ class BookService:
         return books
 
     def get_books_by_id(self, id_value: int) -> Optional[Book]:
-        book = self._crud_book.get(id=id_value)
+        book = self._crud_book.get(id_value)
         return book
 
     def insert_book_review(
