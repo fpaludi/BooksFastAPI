@@ -15,23 +15,23 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 class CRUDAbstract(abc.ABC):
     @abc.abstractmethod
-    def get(self):
+    def get(self):  # pragma: nocover
         pass
 
     @abc.abstractmethod
-    def get_multi(self):
+    def get_multi(self):  # pragma: nocover
         pass
 
     @abc.abstractmethod
-    def create(self):
+    def create(self):  # pragma: nocover
         pass
 
     @abc.abstractmethod
-    def update(self):
+    def update(self):  # pragma: nocover
         pass
 
     @abc.abstractmethod
-    def delete(self):
+    def delete(self):  # pragma: nocover
         pass
 
 
@@ -54,10 +54,7 @@ class CRUDBase(CRUDAbstract, Generic[ModelType, SchemaType, CreateSchemaType, Up
 
     def get(self, id: Any) -> Optional[SchemaType]:
         db_obj = self.db.query(self.model).filter(self.model.id == id).first()
-        schema_obj = None
-        if db_obj:
-            schema_obj = self.schema.from_orm(db_obj)
-        return schema_obj
+        return self.schema.from_orm(db_obj) if db_obj else db_obj
 
     def get_multi(
         self, *, skip: int = 0, limit: int = 100

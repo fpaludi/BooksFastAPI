@@ -1,8 +1,10 @@
+from src.db.models.review import Review
 from typing import List, Tuple, Optional
 from src.schemas.book import Book
 from src.schemas.user import User
-from src.schemas.review import ReviewCreate
+from src.schemas.review import ReviewCreate, Review
 from src.db import CRUDBook, CRUDReview
+from src.api.exceptions import BookAlreadyReviewed
 
 
 class BookService:
@@ -28,7 +30,7 @@ class BookService:
         user: User,
         review_value: int,
         review_comment: str
-    ):
+    ) -> Optional[Review]:
         if not book.reviewed_by_user(user):
             new_review = ReviewCreate(
                 review_value=review_value,
@@ -36,4 +38,7 @@ class BookService:
                 user_id=user.id,
                 book_id=book.id,
             )
-            self._crud_review.create(obj_in=new_review)
+            review = self._crud_review.create(obj_in=new_review)
+        else:
+            review = None
+        return review

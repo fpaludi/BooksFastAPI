@@ -1,13 +1,14 @@
 from enum import Enum
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from logger import get_logger
 from src.services import BookService
-from src.services.logger import get_logger
 from src.schemas.auth import Token
 from src.schemas import book, user, review
 from src.api.dependencies import get_current_user, get_book_service
 from src.api.exceptions import (
     DataNotFoundException,
+    BookAlreadyReviewed,
 )
 
 
@@ -56,14 +57,15 @@ def insert_book_review(
     logger.info(f"user {curret_user.username} review book {book_id}")
     book_to_rev = book_service.get_books_by_id(book_id)
     if book_to_rev:
-        book = book_service.insert_book_review(
+        new_review = book_service.insert_book_review(
             book=book_to_rev,
             user=curret_user,
             review_value=review.review_value,
             review_comment=review.review_comment
         )
-
+        if not new_review:
+            raise BookAlreadyReviewed
     else:
         raise DataNotFoundException
-
-    return book.dict()
+    book = book_service.get_books_by_id(book_id)
+    return book

@@ -36,12 +36,12 @@ run_dev:
 	$(DEV_COMPOSE_CMD) up -d
 
 run_tests: run_dev
-	$(DEV_COMPOSE_CMD) exec api pytest tests/ -vv -s -x \
+	$(DEV_COMPOSE_CMD) exec api pytest tests/ -vv -s \
 	--cov src/ \
 	--cov-report html --cov-report term
 
 run_tests_no_html: up
-	$(DEV_COMPOSE_CMD) exec -T api pytest tests/ -vv -s -x \
+	$(DEV_COMPOSE_CMD) exec -T api pytest tests/ -vv -s \
 	--cov src/ \
 	--cov-report=xml
 

@@ -17,11 +17,11 @@ def get_password_hash(password: str) -> str:
 
 
 class Tokenizer(abc.ABC):
-    @abc.abstractmethod
+    @abc.abstractmethod  # pragma: nocover
     def create_access_token(self, subject: Union[str, Any]) -> str:
         pass
 
-    @abc.abstractmethod
+    @abc.abstractmethod  # pragma: nocover
     def decode_access_token(self, token: str) -> str:
         pass
 

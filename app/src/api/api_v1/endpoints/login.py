@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from logger import get_logger
 from src.services import AuthenticationService
-from src.services.logger import get_logger
 from src.schemas.auth import Token
 from src.schemas import user
 from src.api.dependencies import get_current_user, get_auth_service

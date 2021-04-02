@@ -6,8 +6,8 @@ from src.core import security
 # Shared properties
 class UserBase(BaseModel):
     username: Optional[str] = None
-    confirmed: bool = True
-    is_superuser: bool = False
+    confirmed: Optional[bool] = True
+    is_superuser: Optional[bool] = False
 
 
 class UserCreate(UserBase):
@@ -35,7 +35,7 @@ class UserInDBBase(UserBase):
 
 # Additional properties to return via API
 class User(UserInDBBase):
-    password_hash: str
+    password_hash: Optional[str] = None
 
     def verify_password(self, password: str):
         return security.verify_password(password, self.password_hash)

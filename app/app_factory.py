@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from settings import settings  # noqa
-
+from logger import configure_logger
 
 def app_factory():
+    configure_logger()
     app = FastAPI(title="BooksAPI",)
     from src.api.api_v1.api import api_router
 

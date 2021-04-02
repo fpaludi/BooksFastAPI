@@ -25,7 +25,8 @@ class AuthenticationService:
         return self._crud_user.create(obj_in=new_user)
 
     def sign_in(self, username: str, password: str, password2: str) -> Optional[User]:
-        if password == password2:
+        user_exists = self._crud_user.get_by_username(username=username)
+        if password == password2 and not user_exists:
             new_user = self.add_new_user(username, password)
             return new_user
         return None
@@ -33,7 +34,7 @@ class AuthenticationService:
     def create_access_token(self, username: str, password: str) -> Optional[str]:
         user = self.login(username, password)
         if not user:
-            None
+            return None
         return self._tokenizer.create_access_token(user.username)
 
     def get_current_user(self, token: str) -> Optional[User]:

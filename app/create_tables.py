@@ -35,6 +35,7 @@ def create_tables(engine: Engine, session: Session):  # noqa
 
 def delete_tables(engine: Engine, session: Session):  # noqa
     print("\nRemoving Tables...\n")
+    session.close_all()
     with contextlib.closing(engine.connect()) as con:
         trans = con.begin()
         for table in reversed(Base.metadata.sorted_tables):
@@ -42,6 +43,7 @@ def delete_tables(engine: Engine, session: Session):  # noqa
         for table in reversed(Base.metadata.sorted_tables):
             con.execute(f"TRUNCATE TABLE public.{table.name} RESTART IDENTITY CASCADE;")
         trans.commit()
+    print("\nTables removed")
 
 
 if __name__ == "__main__":

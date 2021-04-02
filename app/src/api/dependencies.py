@@ -1,6 +1,7 @@
 from typing import Generator
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
+from logger import get_logger
 from src.db.session import SessionLocal
 from src.services.factories import ServicesContainer
 from src.schemas import User
@@ -11,14 +12,18 @@ from src.services import (
     AuthenticationService,
 )
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+logger = get_logger(__name__)
 
 
 def get_db() -> Generator:
+    logger.debug("start db session")
     db = SessionLocal()
     try:
         yield db
     finally:
+        logger.debug("close db session")
         db.close()
 
 

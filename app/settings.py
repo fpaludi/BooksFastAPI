@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # LOGGER
-    LOG_LEVEL = "info"
+    LOG_LEVEL = "INFO"
     LOG_FILE = "app.log"
 
     @validator("DATABASE_URI", pre=True)

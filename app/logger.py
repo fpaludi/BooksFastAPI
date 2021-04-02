@@ -40,10 +40,10 @@ def configure_logger():
             },
         },
         "loggers": {
-            "dv": {
+            "log": {
                 "handlers": ["default", "file"],
                 "level": settings.LOG_LEVEL,
-                "propagate": True,
+                "propagate": False,
             },
         }
     })
@@ -77,4 +77,4 @@ def get_logger(name: str) -> logging.Logger:
     logging.Logger
         logger object
     """
-    return structlog.get_logger(f"logger.{name}")
+    return structlog.get_logger(f"log.{name}")

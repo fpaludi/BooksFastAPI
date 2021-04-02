@@ -23,5 +23,9 @@ UserExistsException = HTTPException(
 DataNotFoundException = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
     detail="Data not found",
-    headers={"WWW-Authenticate": "Bearer"},
+)
+
+BookAlreadyReviewed = HTTPException(
+    status_code=status.HTTP_409_CONFLICT,
+    detail="Book was already reviewed by user",
 )
