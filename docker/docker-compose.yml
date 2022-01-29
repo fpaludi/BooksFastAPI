@@ -7,7 +7,7 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    command: /start-reload.sh
+    command: /start.sh
 
   db:
     image: "postgres:13"
